@@ -1,0 +1,91 @@
+% IAG Briefkopf Style
+%
+% \ifundefined{iaghd} or iaghdn=\relax
+\expandafter\ifx\csname iaghd\endcsname\relax
+% \then go ahead \else do nothing
+\else \endinput \fi
+
+\message{Document Style Option `iagkopf' Version 2.2 of 11 May 1998 AJ}
+\message{modified 25 Aug 1998 by L. Gebhardt, removal of `dina4' paper size option}
+\message{to prevent influence on main document}
+
+\gdef\iaghd{}
+
+%\input{a4.sty}
+%\input{dina4.sty}
+%
+\ifx\selectfont\undefined
+% Old-LaTeX font selection scheme
+\message{Old-LaTeX font selection scheme}
+\font\tensfb  = cmssbx10
+\font\elvsfb  = cmssbx10 \@halfmag   % bold sans serif
+\font\svtnsfb = cmssbx10 \@magscale3 % bold sans serif
+\newfam\sfbfam
+\def\sfb{\protect\psfb}
+%    \xpt, from here on the contents of \toks1 will differ.
+%    Also more is stored in it, apart from the definition-text of
+%    \psfb
+%
+{
+\toks0=\expandafter{\xpt}
+\toks1={{\fam\sfbfam\tensfb}\textfont\sfbfam\tensfb
+    \scriptfont\sfbfam\tensfb \scriptscriptfont\sfbfam\tensfb}
+\xdef\xpt{\the\toks0\def\noexpand\psfb\the\toks1}
+%
+%    \xipt
+%
+\toks0=\expandafter{\xipt}
+\toks1={{\fam\sfbfam\elvsfb}\textfont\sfbfam\elvsfb
+    \scriptfont\sfbfam\tensfb \scriptscriptfont\sfbfam\tensfb}
+\xdef\xipt{\the\toks0\def\noexpand\psfb\the\toks1}
+%
+%    \xviipt, from now on the fonts are loaded on demand
+%
+\toks0=\expandafter{\xviipt}
+\toks1={\@getfont\psfb\sfbfam\@xviipt{cmssbx10\@magscale3}}
+\xdef\xviipt{\the\toks0\def\noexpand\psfb{\the\toks1}}
+%
+}
+\newcommand{\kla}{\raisebox{0.2ex}{\tensf(}}
+\newcommand{\klz}{\raisebox{0.2ex}{\tensf)}}
+\else
+% NFSS-LaTeX font selection scheme
+\message{NFSS-LaTeX font selection scheme}
+\newcommand{\tensf}{\hspace*{-0.30em}\fontfamily{cmss}\fontseries{m}
+            \fontshape{n}\fontsize{10}{12pt}\selectfont}
+\newcommand{\elvsf}{\hspace*{-0.30em}\fontfamily{cmss}\fontseries{m}
+            \fontshape{n}\fontsize{11}{13pt}\selectfont}
+\newcommand{\svtnsfb}{\hspace*{-0.35em}\fontfamily{cmss}\fontseries{bx}
+            \fontshape{n}\fontsize{17}{20pt}\selectfont}
+
+\newcommand{\kla}{\raisebox{0.2ex}{\tensf(}}
+\newcommand{\klz}{\raisebox{0.2ex}{\tensf)}}
+\fi
+
+
+\setlength{\unitlength}{1.0mm}
+%
+\newcommand{\iagkopf}{ 
+\begin{picture}(180,15)( 5,  0.00)
+\thicklines
+\put(0,39){\line(1,0){180.7}}
+\put(0,18){\line(1,0){180.7}}
+\put(0,30){\svtnsfb INSTITUT F\"UR AERODYNAMIK}
+\put(0,23){\svtnsfb UND GASDYNAMIK}
+%\put(0,13){\elvsf Universit\"at Stuttgart$\;\cdot\;$Pfaffenwaldring 21%
+%$\;\cdot\;$70550\,\,Stuttgart$\;\cdot\;$Telefon\,\,%
+%\raisebox{0.2ex}{\tensf (}0711\raisebox{0.2ex}{\tensf )}% 
+%\,685-3401$\;\cdot\;$Telefax\,\,%
+%\raisebox{0.2ex}{\tensf (}0711\raisebox{0.2ex}{\tensf )}\,685-3438}
+\put(0,13){\elvsf DIREKTOR: PROF. DR.-ING. EWALD KR\"AMER}
+\put(0,7.5){\elvsf Universit\"at Stuttgart$\;\cdot\;$Pfaffenwaldring 21%
+$\;\cdot\;$70550\,\,Stuttgart$\;\cdot\;$Telefon\,\,%
+\raisebox{0.2ex}{\tensf (}0711\raisebox{0.2ex}{\tensf )}% 
+\,685-63401$\;\cdot\;$Telefax\,\,%
+\raisebox{0.2ex}{\tensf (}0711\raisebox{0.2ex}{\tensf )}\,685-63438}
+\put(144,23){\epsfig{file=iagkopf.eps,height=1.15cm}} 
+\end{picture} 
+}
+
+
+\endinput

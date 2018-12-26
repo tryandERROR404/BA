@@ -1,0 +1,160 @@
+%&latex
+% headsepline: Linie am oberen Blattrand unterhalb der Seitennummer
+% bibtotoc: Aufnahme des Literaturverzeichnisses ins Inhaltsverzeichnis
+\documentclass[a4paper,headsepline,bibtotoc]{scrreprt}
+\makeatletter
+\DeclareOldFontCommand{\rm}{\normalfont\rmfamily}{\mathrm}
+\DeclareOldFontCommand{\sf}{\normalfont\sffamily}{\mathsf}
+\DeclareOldFontCommand{\tt}{\normalfont\ttfamily}{\mathtt}
+\DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
+\DeclareOldFontCommand{\it}{\normalfont\itshape}{\mathit}
+\DeclareOldFontCommand{\sl}{\normalfont\slshape}{\@nomath\sl}
+\DeclareOldFontCommand{\sc}{\normalfont\scshape}{\@nomath\sc}
+\makeatother
+% Einstellungen bez. des 'scrreprt'-Stils
+% Caption Schriftstil und -Groesse
+\renewcommand{\capfont}{\footnotesize}
+\renewcommand{\caplabelfont}{\footnotesize\bfseries}
+\typearea{15}  %Einstellung des Verhältnisses Größe des Textes zur Papiergröße
+% Sprache
+\usepackage[german]{babel}
+\selectlanguage{german}
+\setlength{\parindent}{0pt}
+
+\addto\extrasgerman{\renewcommand{\figurename}{Abb.}}
+\addto\extrasgerman{\renewcommand{\tablename}{Tab.}}
+
+% Bilder
+\usepackage[rflt]{floatflt}
+\usepackage{epsfig,wrapfig}
+
+% Programmablaufplaene (Struktogramme, Nassi-Schneidermann-Diagramme)
+% Dieses Paket ist nicht standardmäßig im CIP-Pool installiert
+% \usepackage{nassi}
+
+% Mathematische Symbole
+\usepackage{amsmath,amssymb}
+
+% Tabellen
+\usepackage{longtable,lscape}
+\usepackage{multirow}
+\usepackage{tabularx}
+
+% Kopfzeilen
+\usepackage{fancyheadings}
+\pagestyle{plain}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markboth{\thesection\ #1}{}}
+\lhead[\fancyplain{}{\sl\leftmark}]%
+      {\fancyplain{}{\sl\leftmark}}
+\rhead[\fancyplain{}{\sl\thepage}]%
+      {\fancyplain{}{\sl\thepage}}
+\cfoot{}
+
+% Aufgabenstellung
+\usepackage{iagkopf}
+
+% Listenerscheinung
+\setlength{\itemsep}{0ex}
+\setlength{\parsep}{0ex}
+\setlength{\parskip}{2mm}
+
+
+\begin{document}
+\sloppy
+
+% Seitennumerierung bis zum Beginn der Einleitung auf kleine roemische Zahlen setzen
+\pagenumbering{roman}
+
+% neue Befehle
+%\newcommand{\file}[1]{{\sffamily\slshape #1}}
+\newcommand{\file}[1]{\mdseries\textsl{\textsf{#1}}}
+\newcommand{\sbr}[1]{\texttt{#1}}
+\newcommand{\var}[1]{\mdseries\textsl{\texttt{#1}}}
+\newcommand{\cmd}[1]{\uppercase{\texttt{#1}}}
+
+% Titelseite
+\title{Titel der Studien/Diplomarbeit}
+
+\author{Studien/Diplomarbeit \\
+        von \\
+        cand.\ aer.\ ...........   }
+
+\publishers{durchgef"uhrt am \\
+            Institut f"ur Aerodynamik und Gasdynamik \\
+            der Universit"at Stuttgart \\
+	    und bei (Name der Firma / \\
+	    Forschungseinrichtung etc. bei externen Arbeiten).\\[5ex]
+            Stuttgart, im (Monat) (Jahr)}
+
+\date{}
+
+\maketitle
+
+% Aufgabenstellung einbinden
+\addcontentsline{toc}{chapter}{Aufgabenstellung}
+\pagestyle{plain}
+\include{aufgabenstellung}
+
+% Übersicht
+\addcontentsline{toc}{chapter}{"Ubersicht}
+\include{uebersicht}
+
+% Inhaltsverzeichnis
+\addcontentsline{toc}{chapter}{Inhaltsverzeichnis}
+\tableofcontents
+
+\clearpage
+% Nomenklatur
+\addcontentsline{toc}{chapter}{Nomenklatur}
+\include{nomenklatur}
+
+\pagestyle{plain}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markboth{\thesection\ #1}{}}
+\lhead[\fancyplain{}{\sl\leftmark}]%
+      {\fancyplain{}{\sl\leftmark}}
+\rhead[\fancyplain{}{\sl\thepage}]%
+      {\fancyplain{}{\sl\thepage}}
+\cfoot{}
+
+% Seitennumerierung ab der folgenden Einleitung auf arabische Zahlen setzen
+\pagenumbering{arabic}
+
+% Einleitung
+\include{einleitung}
+
+% Veruchsanordnung bzw. verwendete Software ******************
+
+% Text
+\include{versuchsanordnung}
+
+\include{verifizierung}
+% Ergebnisse ******************
+
+% Text
+\include{ergebnisse}
+
+% Zusammenfassung ******************
+
+% Text
+\include{zusammenfassung}
+
+% Literatur
+\bibliographystyle{literaturstil}
+\bibliography{literatur}
+
+\clearpage
+% Anhang ******************
+
+%Text
+\addcontentsline{toc}{chapter}{Anhang}
+
+\include{anhang}
+
+
+\end{document}
+
+
+--PART-BOUNDARY=.19810211828.ZM14332.iag.uni-stuttgart.de--
+

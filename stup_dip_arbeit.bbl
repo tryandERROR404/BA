@@ -1,0 +1,14 @@
+\begin{thebibliography}{1}
+
+\bibitem{roy}
+{\sc T.M.~Smith C.C.~Ober C.J.~Roy, C.C.~Nelson}: {\em Verification of
+  Euler/Navier-Stokes codes using the method of manufactured solutions}.
+\newblock International Journal for Numerical Methods in Fluids, No.~44,
+  S.~599--620, 2004.
+
+\bibitem{tremblay}
+{\sc D.~Pelletier D.~Trembley, S.~Étienne}: {\em Code Verification and the
+  Method of Manufactured Solutions for Fluid-Structure Interaction Problems}.
+\newblock Conference Paper, 2006.
+
+\end{thebibliography}
