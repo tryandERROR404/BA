@@ -1,30 +1,28 @@
 \newpage
-\chapter{Grundlagen}
-Die Grundlage zur Verifizierung ist SunwinT. Um zu verstehen, welche Grundlagen untersucht werden sollen, wird in diesem Kapitel zun"achst eine "Ubersicht "uber die physikalischen Grundlagen und sp"ater eine kurze Herleitung des mathematischen Verfahrens zur L"osung der Differentialgleichungen gegeben.
+\chapter{Str"omungsmechanische Grundlagen}
+Die Grundlage zur Verifizierung ist SunwinT. Um zu verstehen, welche Grundlagen untersucht werden sollen, wird in diesem Kapitel zun"achst eine "Ubersicht "uber die physikalischen Grundlagen gegeben
 
-
-\section{Str"omungsmechanische Grundlagen}
 Um eine Str"omung physikalisch beschreiben zu k"onnen, werden mehrere Erhaltungss"atze angewendet:
 \begin{itemize}
-	\item Massenerhaltung
+	\item Massenerhaltung 
 	\item Impulsverhaltung (in vektorieller Form)
 	\item Energieerhaltung
 \end{itemize}
 
-\subsection{Euler-Gleichungen}
+\section{Euler-Gleichungen}
 Durch Vernachl"assigung der W"arme"ubertragung und Reibung können die Navier-Stokes-Gleichungen zu den Euler-Gleichungen vereinfacht werden.
-\begin{gather}
+\begin{gather}\label{eq:euler}
 	\frac{\partial\vec{U}}{\partial t} + \nabla \cdot \vec(F_{inv}(U)) = 0 \footnote{Dabei wird hier noch vernachlässigt, dass diese Gleichung nicht immer zwingend 0 sein muss. (Bsp.: Kraftterme oder Method of Manufactured Solutions)}
 \end{gather}
 $\vec{U}$ beschreibt dabei die konservativen Erhaltungsgr"oßen
-\begin{gather}
+\begin{gather}\label{zustandsvariablen}
 	\vec{U}=\left(\begin{array}{c} \rho \\ \rho u \\ \rho v \\ \rho w \\ \rho E \end{array}\right) \qquad ,
 \end{gather}
 wobei $\rho$ f"ur die Dichte, $\vec(v)=\left(\begin{smallmatrix}u, & v, & w\end{smallmatrix}\right)$ f"ur die Geschwindigkeiten in drei Raumdimensionen und E f"ur die totale Energie steht, welche sich aus der inneren Energie e und der kinetischen Energie zusammensetzt
 \begin{gather}
 	E = e + \frac{1}{2}(u^{2}+v^{2}+w^{2}).
 \end{gather}
-$\vec(F_{inv}(U))$ bezeichnet in Gl.(2.1) den reibungsfreien Flusstensor $\vec(F_{inv}=(F^{x}_{inv}, F^{y}_{inv}, F^{z}_{inv}, ))$:
+$\vec(F_{inv}(U))$ bezeichnet in \ref{eq:euler} den reibungsfreien Flusstensor $\vec(F_{inv}=(F^{x}_{inv}, F^{y}_{inv}, F^{z}_{inv}, ))$:
 \begin{gather}
 	\vec{F_{inv}^{x}}=\left(\begin{array}{c} \rho u\\ \rho u^{2}+p\\ \rho uv \\ \rho uw \\ (\rho E+p)u \end{array}\right) \qquad , \vec{F_{i}^{y}}=\left(\begin{array}{c} \rho v\\ \rho uv\\ \rho v^{2}+p \\ \rho vw \\ (\rho E+p)v \end{array}\right) \qquad , \vec{F_{i}^{z}}=\left(\begin{array}{c} \rho w\\ \rho uw\\ \rho vw \\ \rho w^{2}+p \\ (\rho E+p)w \end{array}\right) \qquad  
 \end{gather}
@@ -34,12 +32,12 @@ p = (\gamma -1)(\rho E - \frac{1}{2}(u^{2}+v^{2}+w^{2})).
 \end{gather}
 Dabei repräsentiert $\gamma$ den adiabaten Exponent. Für Luft gilt $\gamma$=1.4.
 
-\subsection{Navier-Stokes-Gleichungen}
-Sollen nun auch Reibung und W"arme"ubertragung ber"ucksichtigt werden, m"uessen die bereits vorgestellten Euler-Gleichungen (Gl. 2.1) um einen reibungsbehafteten Flussterm $F_{vis}$ erweitert werden. Dadurch wird eine Str"omung so allgemein wie m"oglich beschrieben.
-\begin{gather}
+\section{Navier-Stokes-Gleichungen}
+Sollen nun auch Reibung und W"arme"ubertragung ber"ucksichtigt werden, m"uessen die bereits vorgestellten Euler-Gleichungen (\ref{eq:euler}) um einen reibungsbehafteten Flussterm $F_{vis}$ erweitert werden. Dadurch wird eine Str"omung so allgemein wie m"oglich beschrieben.
+\begin{gather}\label{eq:ns}
 	\frac{\partial\vec{U}}{\partial t} + \nabla \cdot \vec(F_{inv}(U)) -  \nabla \cdot \vec(F_{vis}(U, \nabla U))= 0
 \end{gather}
-Wie auch der reibungslose Flussterm, repräsentiert auch der viskose Term $F_{vis}=(F^{x}_{vis}, (F^{y}_{vis}, (F^{z}_{vis})$ alle Raumrichtungen. Dieser berücksichtigt zum einen den Spannungstensor $\tau$
+Wie auch der reibungslose Flussterm, repräsentiert auch der viskose Term $F_{vis}=(F^{x}_{vis}, (F^{y}_{vis}, (F^{z}_{vis})$ alle Raumrichtungen. Dieser ber"ucksichtigt einerseits den Spannungstensor $\tau$
 \begin{gather}
 	\tau=\begin{pmatrix} 
 	\tau_{xx} & \tau_{xy} & \tau_{xz}\\
@@ -48,12 +46,41 @@ Wie auch der reibungslose Flussterm, repräsentiert auch der viskose Term $F_{vi
 	\end{pmatrix}
 	\quad,
 \end{gather}
-für den gilt:
+f"ur den gilt:
 \begin{gather}
-	\tau_{ij}=\mu (\frac{\partial u_{i}}{\partial x_{j}} +\frac{\partial u_{j}}{\partial x_{i}} - \frac{2}{3}\frac{\partial u_{k}}{\partial x_{k}}\delta_{ij} )
+	\tau_{ij}=\mu \left(\frac{\partial u_{i}}{\partial x_{j}} +\frac{\partial u_{j}}{\partial x_{i}} - \frac{2}{3}\frac{\partial u_{k}}{\partial x_{k}}\delta_{ij} \right) .
 \end{gather}
-\section{Disconstinous Galerkin Verfahren}
-In diesem Kapitel wird das in SUNWinT implementierte DG Verfahren skizziert. Da ein räumlich und zeitlich getrennter Ansatz gewählt wurde, wird zunächst auf die räumliche und im Anschluss daran auf die zeitliche Diskretisierung eingegangen.
+Dabei repr"asentiert $\delta_{ij}$ das Kronekterdelta mit
+\begin{gather}
+	\delta_{ij}=\begin{cases} 
+	1 & \text{für j=i}\\
+	0 & \text{sonst}\\
+	\end{cases}.
+\end{gather}
+F"ur die dynamische Viskosit"at $\mu$ wird Sutherlands Law angewedent, das die Abhänigkeit der Viskosität mit der Temperatur beschreibt
+\begin{gather}
+	\mu = \mu_{0} \left(\frac{T}{T_{0}}\right)^\frac{3}{2} \frac{T_{0}+S}{T+S}
+\end{gather}
+mit
+\begin{gather*}
+	\mu_{0}=1,716\cdot10^{-5} \frac{kg}{ms}, \\
+	T_{0}=273,15 K  \  \text{und} \\
+	S = 110,55K .
+\end{gather*}
+Andererseits wird bei den NS-Gleichungen in der Zeile der Energieerhaltung auch die Wärmeübertragung berücksichtigt. Der daf"ur notwendige W"armestromdichtevektor $\vec{q}$ wird durch das Fouriesche Gesetzt erzeugt:
+\begin{gather}
+	\vec{q} = -\lambda \frac{\partial T}{\partial \vec{x}},
+\end{gather}
+wobei $\lambda$ die temperaturabhänige Stoffgröße der Wärmeleitfähigkeit repräsentiert und sich wiederum aus der dynamischen Viskosität $\mu$, der Wärmeleitfähigkeit bei konstantem Druck $c_{p}$ so wie der Prandtlzahl berechnen lässt:
+\begin{gather}
+	\lambda = \frac{\mu c_{p}}{Pr}
+\end{gather}
+Die Prandtlzahl wird dabei auf $Pr = 0,72$ festgesetzt, was f"ur Luft zwischen 200 K und 600 K angenommen werden kann.
+so erhält man schließlich die viskosen Flussterme zu
+\begin{gather*}
+	\vec{F_{vis}^{x}}=\left(\begin{array}{c} 0\\ \tau_{xx}\\ \tau_{xy} \\ \tau_{xz} \\ u\tau_{xx}+v\tau_{xy}+w\tau_{xz}+q_{x} \end{array}\right) \qquad , \vec{F_{vis}^{y}}=\left(\begin{array}{c} 0\\ \tau_{yx}\\ \tau_{yy} \\ \tau_{yz} \\ u\tau_{yx}+v\tau_{yy}+w\tau_{yz}+q_{y} \end{array}\right) \qquad ,  
+\end{gather*}
+\begin{gather}
+	\vec{F_{vis}^{z}}=\left(\begin{array}{c} 0\\ \tau_{zx}\\ \tau_{zy} \\ \tau_{zz} \\ u\tau_{zx}+v\tau_{zy}+w\tau_{zz}+q_{z} \end{array}\right) \qquad ,
+\end{gather}
 
-\subsection{R"aumliche Diskretisierung}
-Als Grundlage dient die Euler-Gleichung in differentieller konservativer Form

@@ -1,0 +1,29 @@
+\newpage
+\chapter{Discontinous Galerkin Verfahren}
+In diesem Kapitel wird das in SUNWinT implementierte DG Verfahren skizziert. Da ein räumlich und zeitlich getrennter Ansatz gewählt wurde, wird zunächst auf die räumliche und im Anschluss daran auf die zeitliche Diskretisierung eingegangen.
+
+\section{R"aumliche Diskretisierung}
+Als Grundlage dient die Euler-Gleichung in differentieller konservativer Form
+\begin{equation}\label{ausgansgleichungDG}
+	\underbrace{\frac{\partial U}{\partial t}+ \frac{\partial}{\partial x} F(U)}_{\substack{R(U)}} = 0
+\end{equation}
+Diese Gleichung ist für die exakte Lösung gleich null, bei einer numerischen Näherung jedoch wird R(U) nicht exakt null sein. Um allerdings möglichst nahe ran zu kommen, werden nun einige Ansätze vorgestellt und angewandt.
+Bei der Methode der gewichteten Residuen, die in SUNWinT implementiert ist, wird nun nicht das betrachtete Intervall eines Raumes diskretisiert, sondern der Funktionenraum. Dazu wählt man eine beliebige Anzahl elementarer Basisfunktionen. Dies k"onnen beispielsweise Polynome, wie in SUNWinT verwendet\footnote{Basissfunktionen in SUNWinT: $1, x, x^2, x^3$, ...}, sein aber auch trigonometrische Funktionen o.ä. wäre möglich. Die Ansatzfunktion ist nun eine Linearkombination aus diesen Basisfunktionen\footnote{Ansatzfunktion: $v = a_{0}1+a_{1}x+a_{2}x^2$...}. Die dafür benötigten Koefizienten $a_{i}$ werden auch Freiheitsgrade genannt und so bestimmt, dass die Ansatzfunktion eine möglichst gute Approximation darstellt. Das bedeutet die Freiheitsgrade werden so bestimmt, dass der lokale Fehler (die Abweichung von null) möglichst gering ist.
+So wird nun U aus Gl. \ref{ausgansgleichungDG} approximiert zu 
+\begin{equation}\label{Uansatz}
+	\text{\^{U}}(x, t) = \sum_{n=0}^N U_{k}(t)b_{k}(x)
+\end{equation}
+Da ein zeitlich und räumlich getrennter Ansatz verwendet wirk sind die Freiheitgrade $U_{k}$ nur von der Zeit t abhängig und die Basisfunktionen $b_{k}$ nur von der Position im Raum. Die Anzahl der Basisfunktionen und Freiheitgrade ist von der Ordnung des Verfahrens abhängig.
+Nachdem die Basisfunktionen gewählt wurden und in Gl. \ref{ausgansgleichungDG} eingesetzt wurde, muss nun das Residuum möglichst verschwinden. Dazu gibt es mehrere verschiedene Ansätze, wie beispielsweise die Methode der kleinsten Quadrate, die fordert, dass der Betrag des Residuums bezüglich der Freiheitgrade möglichst verschwindet. Hier wird allerdings nur auf die Galerkin-Methode eingegangen, da diese im Code von SUNWinT verwendet wird.
+Die Galerkin-Methode fordert, dass das Integral des Produkt der Basisfunktionen mit dem Residuum auf dem gewählten Intervall verschwindet. Das heißt, das Residuum muss orthogonal auf dem Raum der Ansatzfunktionen stehen. Dazu muss
+\begin{equation}\label{galerkinAnsatz}
+	\int_{\Omega} v_{k}(x) R(\text{\^{U}(x,t)}) d\Omega  \overset{!}{=} 0
+\end{equation}
+Entscheidend bei diesem Ansatz ist, dass $v_{k}(x)=b_{k}(x)$ gilt, also die Basisfunktionen identisch mit den Gewichtungsfunktionen sind. Zu beachten ist außerdem, dass U bzw. \^{U} der Lösungsvektor ist, der für jede Zustandsvariable eine Zeile hat. Das in Gl. \ref{galerkinAnsatz} beschriebe Gleichungssystem besitzt daher Anzahl der Basisfunktionen/Ordnung des Verfahrens $\cdot$ Anzahl der Zustandsvariablen Gleichungen.
+
+Entscheidend für das discontinous Galerkin Verfahren ist, dass die Ansatzfunktion \^{U} nicht über den gesamten Raum, sondern nur innerhalb einer Zelle stetig sein muss. Teilt man nun den Raum in beliebig viele Elemente E, die sich nicht überlappen dürfen, gilt:
+Zur Vereinfachung der folgenden Rechenschritte wird wieder die Notation aus Gl \ref{ausgansgleichungDG} verwendet:
+\begin{equation}\label{galerkin}
+	\int_{\Omega}v_{k}\frac{\partial U}{\partial t}d\Omega+ \int_{\Omega} \underbrace{v_{k}}_{\substack{g(x)}}\underbrace{\frac{\partial}{\partial x} F(U)}_{\substack{f'(x)}}{\Omega} = 0
+\end{equation}
+Wie Gl. \ref{galerkin} entnommen werden kann, bietet sich nun der hintere Term für eine partielle Integration an, mit der man auch die aufwändige partielle Ableitung von F(\^{U}) umgeht.

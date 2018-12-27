@@ -4,11 +4,13 @@ A level-1 auxiliary file: uebersicht.aux
 A level-1 auxiliary file: nomenklatur.aux
 A level-1 auxiliary file: einleitung.aux
 A level-1 auxiliary file: versuchsanordnung.aux
+A level-1 auxiliary file: dg.aux
 A level-1 auxiliary file: verifizierung.aux
 A level-1 auxiliary file: ergebnisse.aux
 A level-1 auxiliary file: zusammenfassung.aux
 The style file: literaturstil.bst
 A level-1 auxiliary file: anhang.aux
+A level-1 auxiliary file: anhangMMSvorgehn.aux
 Database file #1: literatur.bib
 Too many commas in name 1 of "C.J.~Roy, C.C.~Nelson, T.M.~Smith, C.C.~Ober" for entry roy
 while executing---line 1055 of file literaturstil.bst

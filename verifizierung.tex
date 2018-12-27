@@ -1,12 +1,47 @@
 \newpage
 \chapter{Verifizierung}
-Beim Modellieren und Simulieren kann nach Roy \cite{roy} prinzipiell in zwei Fehlerquellen unterschieden werden. Es gibt physikalische Modelierungsfehler und mathematische Fehler. Ersteres wird der Sparte der Validierung zugeordnet, die sich unter anderem mit falschen Vereinfachungen beschäftigt oder dem Gültikeitsbereich bestimmter Modelle. Dies steht bei der Prüfung eines implementierten Verfahrens allerdings an letzter Stelle, da dafür die Richtigkeit der Gleichungen und des Codes vorrausgesetzt werden muss.
-Die Verifizierung der Gleichungen sowie die Verifizierung des Codes sind beides rein mathematische Verfahren, die lediglich prüfen ob die Gleichungen richtig gelöst werden. Die Validierung hingegen überprüft, ob die richtigen Gleichungen gelöst werden.  \cite{tremblay}.
+Beim Modellieren und Simulieren kann nach Roy \cite{roy} prinzipiell in zwei Fehlerquellen unterschieden werden. Es gibt physikalische Modelierungsfehler und mathematische Fehler. Ersteres wird der Sparte der Validierung zugeordnet, die sich unter anderem mit falschen Vereinfachungen besch"aftigt oder dem G"ultikeitsbereich bestimmter Modelle. Dies steht bei der Pr"ufung eines implementierten Verfahrens allerdings an letzter Stelle, da daf"ur die Richtigkeit der Gleichungen und des Codes vorrausgesetzt werden muss.
+Die Verifizierung der Gleichungen sowie die Verifizierung des Codes sind beides rein mathematische Verfahren, die lediglich pr"ufen ob die Gleichungen richtig gel"ost werden. Die Validierung hingegen "uberpr"uft, ob die richtigen Gleichungen gel"ost werden\cite{tremblay}.
 
-\section{Str"omungsmechanische Grundlagen}
-Um eine Str"omung physikalisch beschreiben zu k"onnen, werden mehrere Erhaltungss"atze angewendet:
+Nach Trembkay et Al. \cite{tremblay} dient die Verifizierung des Codes dazu nachzuweisen, dass der numerische Code richtig funktioniert (u.a. keine Bugs). Dazu wird der Fehler mit einer bekannten L"osung verglichen und bewertet. Die Verifizierung der Gleichungen hingegen "uberpr"uft die erwartete Genauigkeit bezogen auf bestimmte Anwendungsprobleme. An erster Stelle bei der "Uberpr"ufung von Code sollte immer die Verifizierung des Codes stehen, mit der sich diese Arbeit befasst.
+
+
+\section{Verifizierung des Codes}
+Um Code zu verifizieren gibt es verschieden Ans"atze:
 \begin{itemize}
-	\item Massenerhaltung
-	\item Impulsverhaltung (in vektorieller Form)
-	\item Energieerhaltung
+	\item Methode der exakten L"osung
+	\item Methode der manufactured Solutions
+	\item Vergleich zu bereits bekannten numerischen L"osungen
+	\item Code-to-Code-Vergleich
 \end{itemize}
+Wobei die letzen beiden Ans"atze nicht zur fundierten Verifizierung gez"ahlt werden k"onnen\cite{roy} und daher hier vernachl"assigt werden.
+
+\subsection{Methode der exact solutions}
+Bei der Methode der exact solutions werden zu Verifizierung nur Gleichungen verwendet, deren L"osung analytisch bestimmt werden kann. Das Vorgehen l"asst sich folgenderma"sen zusammenfassen:
+\begin{enumerate}
+	\item Wahl der PDEs (f"ur CFD-Anwendungen meist Gl. 2.1 bzw, Gl. 2.6)
+	\item Wahl eines Rechengebietes bzw. der Domain
+	\item Wahl der Rand-/Anfangswerten
+	\item Analytische L"osung der PDEs finden (z.B. Seperation der Variablen, Charakteristikmethode, Transformation)
+\end{enumerate} 
+Dabei darf nicht vernachl"assigt werden, dass nur f"ur sehr wenige PDE-Systeme eine analytische L"osung existiert. So m"ussen h"aufig relevante Vereinfachungen bei der Wahl der Dimensionen, der Geometrie der zu untersuchenden K"orpern, dem physikalischen Modell oder "ahnlichem gemacht werden. Dies begrenzt die Anwendung auf wenige, vereinfachte Gleichungen.
+Als Beispiel hierf"ur f"uhrt Oberkampf et Al. \cite{bookMMS} die Couette-Str"omung an. Es handelt sich dabei um einen der wenigen Str"omungsf"alle, f"ur den eine exakte analytische L"osung existiert. Eine Coutte-Str"omung beschreibt die laminare, station"are Str"omung einer Fl"ussigkeit zwischen zwei parallel zueinander liegenden Platten, wobei sich eine der Platten relativ zur anderen bewegt. Da die viskose Fl"ussigkeit an beiden Platten haftet, stellt sich ein linearer Geschwindigeitsverlauf zwischen den Platten ein. Dadurch muss der diffusive Teil der NS-Gleichungen, ein Term der zweiten Ableitung der Geschwindigkeit null sein. Eine Verifizierung des Codes durch die Methode der exact solution mit der Couette-Str"omung kann floglich nicht "uberpr"ufen, ob der diffusive Term richtig implementiert ist. "Ahnliches gilt auch f"ur die andern analytischl"osbaren F"alle.
+Wie das genannte Beispiel zeigt, kann somit nicht garantiert werden, dass die Komplexit"at des implementierten Codes mit all seinen Anwendungsf"allen vollst"andig verifiziert wird.
+
+\subsection{Methode der Manufactured Solutions}
+Besonders um die Konvergenzordnung des implementierten Codes zu verifizieren, sind exakte analytische Lösungen von besonderer Bedeutung. Solche exakten Lösungen können mit der Methode der Manufactured Solutions auch für komplexe, d.h. nicht-lineare, gekoppelte, höherdimensionale PDEs gefunden werden, bei denen die traditionellen exakten Lösungen an ihre Grenzen stoßen. Im traditionellen Ansatz wird versucht eine analytische Lösung durch vorgegebene Rand- bzw. Initialbedingungen zu bestimmen. Die Methode der Manucatured Solutions hingegen nutz zur reinen Verifizierung des Codes aus, dass keine physikalisch sinnvolle Lösung untersucht werden muss. Dies ermöglicht die Vorgabe einer beliebigen Lösung auf dem Rechengebiet der PDEs. Dies kann erreicht werden, indem die rechte Seite der Gleichung \ref{eq:euler} bzw. \ref{eq:ns} durch einen analytischen Quellterm vorgegeben wird.
+Vorgehen nach Roy et Al \cite{roy} um die Konvergenzordnung zu bestimmen
+\begin{enumerate}
+	\item Festlegung des zu lösenden PDE-Systems
+	\item Wahl der manufactured solutions für jede Zustandsvariable
+	\item Anwendung der manufactured solutions auf das PDE-System um analytische Quellterme zu erzeugen
+	\item Durchführen der numerischen Rechnungen auf mehrereren unterschiedlich feinen Gittern
+	\item Auswerten des globalen Diskretisierungsfehlers in der numerischen Lösung
+	\item Abgleich der daraus entstandenen Konvergenzordnung mit der formalen Konvergenzordnung
+\end{enumerate}
+
+\subsubsection{Richtlinien für die Wahl der Manufactured solutions}
+Um verwertbare Ergebnisse mit dieser Methode zu bekommen, ist es sinnvoll die Richtlinien von Oberkampf und Roy \cite{bookMMS} zu beachten. Demnach muss unteranderem die Lösung zwar nicht physikalisch sein, Naturgesetze, wie keine negativen Temperaturen, müssen dennoch eingehalten werden. Eine Verletzung könnte bei der Berechnung der Schallgeschwindigkeit zu einem negativen Term unter der Wurzel führen.
+Alle Teile des Codes können nur dann richtig verifiziert werden, wenn kein Term der Manuctured Solutions den anderen um ein Vielfaches übersteigt. So wird beispielsweise mit der Wahl einer sehr niedrigen Renoldszahl gewährleistet, dass sowohl der konvektive Teil, wie auch der diffusive Teil der governing equations verifiziert wird. Um dies nachzuweisen sei auf das Vorgehen von Roy at Al. \cite{roy2007verification} verwiesen, die das Verhältnis der Terme in wichtigen Regionen überprüfen.
+Wichtig bei der Wahl der Manufactured solutions ist auch, dass die Ableitungen, dazu zählen auch mehrfache und gemischte Ableitungen, stetig sind und nicht verschwinden. Aus diesem Grund werden meist trigonometrische oder Exponentialfunktionen verwendet.
+Um besonders bei höherdimensionalen Rechnungen auf vielfach verfeinerten Gittern Resourcen zu sparen, ist es empfehlenswert nicht eine ganze Periode der trigonometrischen Funktionen auf der Domain abzubilden. F"ur korrekte Ergebnisse reichen breits $\frac{1}{3}$ oder $\frac{1}{5}$.
