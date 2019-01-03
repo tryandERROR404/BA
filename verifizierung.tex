@@ -6,16 +6,27 @@ Die Verifizierung der Gleichungen sowie die Verifizierung des Codes sind beides 
 Nach Trembkay et Al. \cite{tremblay} dient die Verifizierung des Codes dazu nachzuweisen, dass der numerische Code richtig funktioniert (u.a. keine Bugs). Dazu wird der Fehler mit einer bekannten L"osung verglichen und bewertet. Die Verifizierung der Gleichungen hingegen "uberpr"uft die erwartete Genauigkeit bezogen auf bestimmte Anwendungsprobleme. An erster Stelle bei der "Uberpr"ufung von Code sollte immer die Verifizierung des Codes stehen, mit der sich diese Arbeit befasst.
 
 
-\section{Verifizierung des Codes}
-Um Code zu verifizieren gibt es verschieden Ans"atze:
+\section{Methoden zur Verifizierung des Codes}
+Gerade bei numerischem Code ist auf den Prozess der Verifizierung besonderes Augenmerk zu legen, da die Ausgaben des Codes nicht vom Benutzer als richtig oder flasch unterschieden werden können. Das Ergebnis ist von Parametern wie der Schrittweite der Zeitintegration, dem Netz und dem gew"ahlten Algorithmus abh"angig. Um Code zu verifizieren gibt es verschieden Ans"atze:
 \begin{itemize}
-	\item Methode der exakten L"osung
-	\item Methode der manufactured Solutions
-	\item Vergleich zu bereits bekannten numerischen L"osungen
-	\item Code-to-Code-Vergleich
+	\item \textbf{einfache Tests}\\
+	Diese Tests haben den Vorteil, dass sie keine exakten Lösungen brauchen und schnell durchzuf"uhren sind. Sie sind allerdings nicht quantifizierbar und h"angen stark von der F"ahigkeit des Anwenders ab, solche Tests durchf"uhren zu können.
+	Ein Beispiel hierf"ur ist eine Strömung um einen Zylinder. Dabei erwartet der Anwender je nach Reynolds-Zahl eine symmetrische Umströmung bzw. das entstehen einer Karmanschen Wirbelstra"se. Erzeugt der geteste Algorithmus andere Ausgaben, muss noch ein Fehler im Code sein.
+	F"ur stichhaltige Verifizierungsvorg"ange ist diese Methode allerdings nicht brauchbar.
+	\item \textbf{Code-to-Code Verlgeich}\\
+	Diese Methode vergleicht nicht syntaktisch jede Zeile des Codes, sondern der vom Code erzeugte Output. Diese Verifzisierungsmethode ist nur dann sinnvoll einsetzbar, wenn beide Codes die selben mathematischen Modelle benutzen und einer der Codes bereits gründlicheren Verifizierungsmethoden unterzogen wurde. Aber auch dann ist ein Code-to-Code Verlgeich nach \cite{bookMMS} mit Vorsicht zu genießen.
+	\item \textbf{Quantifizierung des Diskretisierungsfehlers}\\
+	Um den Diskretisierungsfehler ermitteln zu können, muss bei dieser Methode eine exakte Lösung vorhanden sein. Nun wird diese exakte Lösung mit der numerischen Lösung bei einem Zeitschritt und einer Diskretesierungsstufe verglichen. Da nur eine Rechnung bzw. Diskretisierung notwendig ist, lässt sich ein solcher Test schnell durchführen. Er verlangt jedoch die subjektive Einschätzung ob der Fehler "klein genug" ist, oder nicht.
+	\item \textbf{Konvergenztests}\\
+	Zur Durchführung von Konvergenztests wird die selbe Methode wie bei der Quantifizierung des Diskretisierungsfehlers verwendet. Dabei werden die Rechnungen allerdings mit unterschieldichen Zeitschritten oder räumlichen Diskretiserungen durchgeführt. So wird nicht nur die Größe des Fehlers überprüft, sondern auch wie er sich bei feinerern Diskretisierungen verhält. Nach \cite{bookMMS} ist dieser Test die minimale Anforderung an vertrauenswürdige Codeverifizierung.
+	\item \textbf{Test der Konvergenzordnung}
+	Der Gründlichste Test zur Verifizierung ist der Test der Konvergenzordnung, der im Vergelich zum Konvergenztest auch prüft, ob die theoretische Konvergenzordnung mit der des ausgeführten Codes übereinstimmt. Dazu werden mindestens zwei unterschiedliche Diskretisierungen benötigt, deren Fehler verglichen werden. Die Erfüllung dieses Tests ist das schwierigste und vertrauenswürdigste Kriterium, da der Test auf sehr viele Codingfehler sensibel reagiert (z.B. Transformationen, Implementierung der Randbedingungen etc.)
 \end{itemize}
-Wobei die letzen beiden Ans"atze nicht zur fundierten Verifizierung gez"ahlt werden k"onnen\cite{roy} und daher hier vernachl"assigt werden.
 
+\subsection{Test der Konvergenzordnung}
+
+\section{Generierung der exakten Lösungen}
+Wie gezeigt wurde, werden für den Test der Konvergenzordnung analytische Lösungen benötigt. Wie diese erzeugt werden klären die nächsten Abschnitte
 \subsection{Methode der exact solutions}
 Bei der Methode der exact solutions werden zu Verifizierung nur Gleichungen verwendet, deren L"osung analytisch bestimmt werden kann. Das Vorgehen l"asst sich folgenderma"sen zusammenfassen:
 \begin{enumerate}
@@ -29,19 +40,19 @@ Als Beispiel hierf"ur f"uhrt Oberkampf et Al. \cite{bookMMS} die Couette-Str"omu
 Wie das genannte Beispiel zeigt, kann somit nicht garantiert werden, dass die Komplexit"at des implementierten Codes mit all seinen Anwendungsf"allen vollst"andig verifiziert wird.
 
 \subsection{Methode der Manufactured Solutions}
-Besonders um die Konvergenzordnung des implementierten Codes zu verifizieren, sind exakte analytische Lösungen von besonderer Bedeutung. Solche exakten Lösungen können mit der Methode der Manufactured Solutions auch für komplexe, d.h. nicht-lineare, gekoppelte, höherdimensionale PDEs gefunden werden, bei denen die traditionellen exakten Lösungen an ihre Grenzen stoßen. Im traditionellen Ansatz wird versucht eine analytische Lösung durch vorgegebene Rand- bzw. Initialbedingungen zu bestimmen. Die Methode der Manucatured Solutions hingegen nutz zur reinen Verifizierung des Codes aus, dass keine physikalisch sinnvolle Lösung untersucht werden muss. Dies ermöglicht die Vorgabe einer beliebigen Lösung auf dem Rechengebiet der PDEs. Dies kann erreicht werden, indem die rechte Seite der Gleichung \ref{eq:euler} bzw. \ref{eq:ns} durch einen analytischen Quellterm vorgegeben wird.
+Besonders um die Konvergenzordnung des implementierten Codes zu verifizieren, sind exakte analytische L"osungen von besonderer Bedeutung. Solche exakten L"osungen k"onnen mit der Methode der Manufactured Solutions auch f"ur komplexe, d.h. nicht-lineare, gekoppelte, h"oherdimensionale PDEs gefunden werden, bei denen die traditionellen exakten L"osungen an ihre Grenzen sto"sen. Im traditionellen Ansatz wird versucht eine analytische L"osung durch vorgegebene Rand- bzw. Initialbedingungen zu bestimmen. Die Methode der Manucatured Solutions hingegen nutz zur reinen Verifizierung des Codes aus, dass keine physikalisch sinnvolle L"osung untersucht werden muss. Dies erm"oglicht die Vorgabe einer beliebigen L"osung auf dem Rechengebiet der PDEs. Dies kann erreicht werden, indem die rechte Seite der Gleichung \ref{eq:euler} bzw. \ref{eq:ns} durch einen analytischen Quellterm vorgegeben wird.
 Vorgehen nach Roy et Al \cite{roy} um die Konvergenzordnung zu bestimmen
 \begin{enumerate}
-	\item Festlegung des zu lösenden PDE-Systems
-	\item Wahl der manufactured solutions für jede Zustandsvariable
+	\item Festlegung des zu l"osenden PDE-Systems
+	\item Wahl der manufactured solutions f"ur jede Zustandsvariable
 	\item Anwendung der manufactured solutions auf das PDE-System um analytische Quellterme zu erzeugen
-	\item Durchführen der numerischen Rechnungen auf mehrereren unterschiedlich feinen Gittern
-	\item Auswerten des globalen Diskretisierungsfehlers in der numerischen Lösung
+	\item Durchf"uhren der numerischen Rechnungen auf mehrereren unterschiedlich feinen Gittern
+	\item Auswerten des globalen Diskretisierungsfehlers in der numerischen L"osung
 	\item Abgleich der daraus entstandenen Konvergenzordnung mit der formalen Konvergenzordnung
 \end{enumerate}
 
-\subsubsection{Richtlinien für die Wahl der Manufactured solutions}
-Um verwertbare Ergebnisse mit dieser Methode zu bekommen, ist es sinnvoll die Richtlinien von Oberkampf und Roy \cite{bookMMS} zu beachten. Demnach muss unteranderem die Lösung zwar nicht physikalisch sein, Naturgesetze, wie keine negativen Temperaturen, müssen dennoch eingehalten werden. Eine Verletzung könnte bei der Berechnung der Schallgeschwindigkeit zu einem negativen Term unter der Wurzel führen.
-Alle Teile des Codes können nur dann richtig verifiziert werden, wenn kein Term der Manuctured Solutions den anderen um ein Vielfaches übersteigt. So wird beispielsweise mit der Wahl einer sehr niedrigen Renoldszahl gewährleistet, dass sowohl der konvektive Teil, wie auch der diffusive Teil der governing equations verifiziert wird. Um dies nachzuweisen sei auf das Vorgehen von Roy at Al. \cite{roy2007verification} verwiesen, die das Verhältnis der Terme in wichtigen Regionen überprüfen.
-Wichtig bei der Wahl der Manufactured solutions ist auch, dass die Ableitungen, dazu zählen auch mehrfache und gemischte Ableitungen, stetig sind und nicht verschwinden. Aus diesem Grund werden meist trigonometrische oder Exponentialfunktionen verwendet.
-Um besonders bei höherdimensionalen Rechnungen auf vielfach verfeinerten Gittern Resourcen zu sparen, ist es empfehlenswert nicht eine ganze Periode der trigonometrischen Funktionen auf der Domain abzubilden. F"ur korrekte Ergebnisse reichen breits $\frac{1}{3}$ oder $\frac{1}{5}$.
+\subsubsection{Richtlinien f"ur die Wahl der Manufactured solutions}
+Um verwertbare Ergebnisse mit dieser Methode zu bekommen, ist es sinnvoll die Richtlinien von Oberkampf und Roy \cite{bookMMS} zu beachten. Demnach muss unteranderem die L"osung zwar nicht physikalisch sein, Naturgesetze, wie keine negativen Temperaturen, m"ussen dennoch eingehalten werden. Eine Verletzung k"onnte bei der Berechnung der Schallgeschwindigkeit zu einem negativen Term unter der Wurzel f"uhren.
+Alle Teile des Codes k"onnen nur dann richtig verifiziert werden, wenn kein Term der Manuctured Solutions den anderen um ein Vielfaches "ubersteigt. So wird beispielsweise mit der Wahl einer sehr niedrigen Renoldszahl gew"ahrleistet, dass sowohl der konvektive Teil, wie auch der diffusive Teil der governing equations verifiziert wird. Um dies nachzuweisen sei auf das Vorgehen von Roy at Al. \cite{roy2007verification} verwiesen, die das Verh"altnis der Terme in wichtigen Regionen "uberpr"ufen.
+Wichtig bei der Wahl der Manufactured solutions ist auch, dass die Ableitungen, dazu z"ahlen auch mehrfache und gemischte Ableitungen, stetig sind und nicht verschwinden. Aus diesem Grund werden meist trigonometrische oder Exponentialfunktionen verwendet.
+Um besonders bei h"oherdimensionalen Rechnungen auf vielfach verfeinerten Gittern Resourcen zu sparen, ist es empfehlenswert nicht eine ganze Periode der trigonometrischen Funktionen auf der Domain abzubilden. F"ur korrekte Ergebnisse reichen breits $\frac{1}{3}$ oder $\frac{1}{5}$.
